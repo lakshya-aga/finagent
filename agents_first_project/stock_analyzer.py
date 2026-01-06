@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 import mplfinance as mpf
 import datetime
 import time # Import the time module
+import os
 
 # Alpha Vantage API key
-API_KEY = "BPWQMYD9I2E15TFH" # This should ideally be loaded from an environment variable for security
+API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY") # This should ideally be loaded from an environment variable for security
 
 def fetch_stock_data(symbol, api_key):
     print(f"Fetching data for {symbol}...")
