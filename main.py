@@ -36,7 +36,13 @@ def call_agent(client, args):
 
         if response.function_calls:
             for function_call in response.function_calls:
-                print(f"Calling function: {function_call.name} {function_call.args}")
+                print(
+                    f"Calling function: {function_call.name} "
+                    f"{[
+                        f'{k}: {v[:100] + "..." if len(v) > 100 else v}'
+                        for k, v in function_call.args.items()
+                    ]}"
+                )
 
                 function_call_result = call_function(function_call, verbose=args.verbose)
                 messages.append(function_call_result)

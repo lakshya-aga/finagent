@@ -3,12 +3,14 @@ from functions.get_files_info import get_files_info, schema_get_files_info
 from functions.get_file_content import get_file_content, schema_get_file_content
 from functions.run_python_file import schema_run_python_file, run_python_file
 from functions.write_file import schema_write_file, write_file
+from functions.install_packages import schema_install_packages, install_packages
 
 available_functions = types.Tool(
     function_declarations=[schema_get_files_info,
                            schema_write_file,
                            schema_run_python_file,
-                           schema_get_file_content
+                           schema_get_file_content,
+                           schema_install_packages
                            ]
 )
 def call_function(function_call, verbose=False):
@@ -35,7 +37,7 @@ def call_function(function_call, verbose=False):
             ],
         )
     args = dict(function_call.args) if function_call.args else {}
-    args['working_directory'] = "./calculator"
+    args['working_directory'] = "./agents_first_project"
     function_result = function_map[function_name](**args)
     return types.Content(
         role="tool",
