@@ -1,1 +1,0 @@
-It's possible that with a different dataset, more hidden states, or more complex HMM parameters (e.g., more ), the model might identify distinct regimes such as bullish, bearish, or high volatility states. However, with the current setup and data, a single, relatively stable regime was identified.

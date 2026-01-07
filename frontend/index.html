@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Coding Agent Terminal</title>
+  <style>
+    body {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #output {
+      white-space: pre-wrap;
+      border: 1px solid #30363d;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      background: #161b22;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>AI Coding Agent</h3>
+  <div id="output"></div>
+  <input id="input" placeholder="Enter prompt and press Enter" />
+
+  <script>
+    const output = document.getElementById("output");
+    const input = document.getElementById("input");
+
+    const ws = new WebSocket("ws://localhost:8000/terminal");
+
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      output.textContent += `[${msg.type}] ${msg.content}\n`;
+      output.scrollTop = output.scrollHeight;
+    };
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        ws.send(input.value);
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>

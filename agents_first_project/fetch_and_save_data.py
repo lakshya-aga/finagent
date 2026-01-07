@@ -4,17 +4,6 @@ import numpy as np
 import os
 from alpha_vantage.timeseries import TimeSeries
 
-def create_dummy_data(num_days=252 * 10): # 10 years of trading days
-    """Creates dummy NIFTY 50-like data."""
-    np.random.seed(42)
-    dates = pd.date_range(start='2014-01-01', periods=num_days, freq='B')
-    # Simulate a general uptrend with some volatility
-    prices = 10000 + np.cumsum(np.random.randn(num_days) * 20 + 5)
-    # Ensure no negative prices, though unlikely with this generation
-    prices[prices < 0] = 100
-    df = pd.DataFrame({'Date': dates, 'Close': prices})
-    df.set_index('Date', inplace=True)
-    return df
 
 def fetch_nifty50_data():
     """
@@ -23,7 +12,6 @@ def fetch_nifty50_data():
     api_key = os.getenv('ALPHAVANTAGE_API_KEY')
     if not api_key:
         print("Alpha Vantage API key not found. Using dummy data.")
-        return create_dummy_data()
 
     print("Fetching NIFTY 50 data from Alpha Vantage...")
     ts = TimeSeries(key=api_key, output_format='pandas')
@@ -34,8 +22,7 @@ def fetch_nifty50_data():
         data = data.rename(columns={'4. close': 'Close'})
         return data[['Close']].sort_index() # Ensure chronological order
     except Exception as e:
-        print(f"Error fetching data from Alpha Vantage: {e}. Using dummy data.")
-        return create_dummy_data()
+        print(f"Error fetching data from Alpha Vantage: {e}.")
 
 def main():
     if not os.path.exists('data'):

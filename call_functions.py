@@ -15,9 +15,9 @@ available_functions = types.Tool(
 )
 def call_function(function_call, verbose=False):
     if verbose:
-        print(f"Calling function: {function_call.name}({function_call.args})")
+        print(f"Calling function: {function_call['name']}({function_call['args']})")
     else:
-        print(f" - Calling function: {function_call.name}")
+        print(f" - Calling function: {function_call['name']}")
     function_map = {
         "get_files_info": get_files_info,
         "get_file_content": get_file_content,
@@ -25,7 +25,7 @@ def call_function(function_call, verbose=False):
         "run_python_file": run_python_file
     }
 
-    function_name = function_call.name or ""
+    function_name = function_call['name'] or ""
     if function_map.get(function_name) is None:
         return types.Content(
             role="tool",
@@ -36,9 +36,10 @@ def call_function(function_call, verbose=False):
                 )
             ],
         )
-    args = dict(function_call.args) if function_call.args else {}
+    args = dict(function_call['args']) if function_call['args'] else {}
     args['working_directory'] = "./agents_first_project"
     function_result = function_map[function_name](**args)
+    return function_result
     return types.Content(
         role="tool",
         parts=[
