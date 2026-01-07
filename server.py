@@ -5,6 +5,9 @@ from call_functions import available_functions
 from prompts import system_prompt
 from google import genai
 import os
+import dotenv
+
+dotenv.load_dotenv()
 
 app = FastAPI()
 
@@ -23,6 +26,7 @@ async def terminal(ws: WebSocket):
     user_prompt = await ws.receive_text()
 
     async for event in agent.run(user_prompt):
+        print(f"Sending event: {event.type} - {event.content}")
         await ws.send_json({
             "type": event.type,
             "content": event.content

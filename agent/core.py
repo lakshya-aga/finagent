@@ -23,7 +23,7 @@ class CodingAgent:
                 system_prompt=self.system_prompt,
                 tools=self.tools
             )
-            self.messages.append({"role": "assistant", "content": response["message"]})
+            self.messages.append({"role": "model", "content": response["message"]})
             # response = response["message"]
             if response.get("tool_calls"):
                 for function_call in response.get("tool_calls"):
@@ -36,7 +36,7 @@ class CodingAgent:
                     )
 
                     function_call_result = call_function(function_call)
-                    self.messages.append(function_call_result)
+                    self.messages.append({"role": "model", "content": str(function_call_result)})
                     
                     yield AgentEvent("tool_result", function_call_result)
             else:

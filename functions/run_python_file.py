@@ -16,7 +16,7 @@ def run_python_file(working_directory, file_path, args=None):
         if not file_path.endswith('.py'):
             return f'Error: "{file_path}" is not a Python file'
         
-        command = ['python', target_file]
+        command = ['python3', target_file]
         if args is not None:
             command.extend(args)
         ans = ""

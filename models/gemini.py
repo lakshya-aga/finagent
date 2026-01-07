@@ -6,13 +6,20 @@ class GeminiModel:
         self.model = model
 
     async def generate(self, messages, system_prompt, tools):
-        contents = [
-            types.Content(
-                role=m["role"],
-                parts=[types.Part(text=m["content"])]
+        contents = []
+        for m in messages:
+            # HARD NORMALIZATION
+
+            text = m["content"]
+            if not isinstance(text, str):
+                text = str(text)
+
+            contents.append(
+                types.Content(
+                    role=m["role"],
+                    parts=[types.Part(text=text)]
+                )
             )
-            for m in messages
-        ]
 
         config = types.GenerateContentConfig(
             tools=[tools],
@@ -25,9 +32,11 @@ class GeminiModel:
             config=config
         )
 
+        text = response.text or ""
+
         result = {
             "message": response.candidates[0].content,
-            "text": response.text,
+            "text": text,
             "tool_calls": []
         }
 
